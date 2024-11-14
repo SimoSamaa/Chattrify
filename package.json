@@ -1,0 +1,27 @@
+{
+  "name": "chattrify",
+  "version": "1.0.0",
+  "description": "ChatApp is a real-time messaging application inspired by WhatsApp, designed to provide seamless communication with essential features. This project leverages modern web and mobile technologies to create a full-featured chat experience with end-to-end encryption, multimedia support, and responsive design",
+  "scripts": {
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "client": "cd client && npm run dev",
+    "server": "cd server && npm run dev"
+  },
+  "keywords": [
+    "Real-Time Messaging",
+    "WhatsApp Clone",
+    "Chat Application",
+    "Web Development",
+    "End-to-End Encryption",
+    "WebSocket Chat",
+    "Voice and Video Calls",
+    "Group Chat",
+    "Multimedia Sharing",
+    "Push Notifications"
+  ],
+  "author": "mohamed idbrahim",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

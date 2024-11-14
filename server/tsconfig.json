@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                                  
+
+    /* Modules */
+    "module": "NodeNext",                                
+    "rootDir": "./src",                                 
+    "moduleResolution": "NodeNext",                     
+    // "baseUrl": "./",                                  
+    "paths": {
+      "@models/*": ["/src/models/*"]
+    },
+
+    "outDir": "./dist",                                   
+    "esModuleInterop": true,                             
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,                               
+    "noImplicitAny": true,
+    "strictNullChecks": true,                        
+    "strictFunctionTypes": true,
+
+    /* Completeness */
+    "skipLibCheck": true,
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
