@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build",
-    "start": "node --env-file=.env dist/app.js",
-    "dev": "node --watch --env-file=.env watch-wrapper.js"
+    "start": "cross-env DEV_MODE=production node --env-file=.env dist/app.js",
+    "dev": "cross-env DEV_MODE=development node --watch --env-file=.env watch-wrapper.js"
   },
   "keywords": [],
   "author": "",
@@ -14,16 +14,30 @@
   "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.5",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "express": "^4.21.1",
+    "express-fileupload": "^1.5.1",
+    "express-mongo-sanitize": "^2.2.0",
     "express-validator": "^7.2.0",
+    "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.1"
+    "mongoose": "^8.8.1",
+    "morgan": "^1.10.0",
+    "trim-request": "^1.0.6"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/compression": "^1.7.5",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/express-fileupload": "^1.5.1",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/mongoose": "^5.11.96",
+    "@types/morgan": "^1.9.9",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.24.0",
     "esbuild-runner": "^2.2.2",
     "ts-node": "^10.9.2",
