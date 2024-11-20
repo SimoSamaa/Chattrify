@@ -5,7 +5,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   picture?: string;
-  status: string;
+  status?: string;
 };
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -31,7 +31,6 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   status: {
     type: String,
-    required: true,
     default: 'He there! I am using Chattrify.',
   },
 }, {

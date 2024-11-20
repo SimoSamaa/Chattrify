@@ -1,4 +1,5 @@
-import { NextFunction } from 'express';
+import { NextFunction, Request } from 'express';
+import { validationResult } from 'express-validator';
 
 class HttpError extends Error {
   public status: number;
@@ -7,6 +8,15 @@ class HttpError extends Error {
     super(message);
     this.status = status;
     this.name = this.constructor.name;
+  }
+
+  static validation(req: Request) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new HttpError(422, errors.array()[0].msg);
+      throw error;
+    }
   }
 
   static notFound(model: object, mess: string) {

@@ -25,7 +25,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.1",
     "morgan": "^1.10.0",
-    "trim-request": "^1.0.6",
     "zod": "^3.23.8"
   },
   "devDependencies": {
