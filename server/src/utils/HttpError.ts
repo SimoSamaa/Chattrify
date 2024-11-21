@@ -19,6 +19,14 @@ class HttpError extends Error {
     }
   }
 
+  static badRequest(message: string) {
+    throw new HttpError(400, message);
+  }
+
+  static notFound(message: string) {
+    throw new HttpError(404, message);
+  }
+
   static serverFail(error: HttpError, next: NextFunction) {
     if (!error.status) {
       error.status = 500;
