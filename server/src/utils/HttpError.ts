@@ -27,6 +27,10 @@ class HttpError extends Error {
     throw new HttpError(404, message);
   }
 
+  static unauthorized(message: string) {
+    throw new HttpError(401, message);
+  }
+
   static serverFail(error: HttpError, next: NextFunction) {
     if (!error.status) {
       error.status = 500;
