@@ -19,13 +19,6 @@ class HttpError extends Error {
     }
   }
 
-  static notFound(model: object, mess: string) {
-    if (!model) {
-      const error = new HttpError(404, mess);
-      throw error;
-    }
-  }
-
   static serverFail(error: HttpError, next: NextFunction) {
     if (!error.status) {
       error.status = 500;
