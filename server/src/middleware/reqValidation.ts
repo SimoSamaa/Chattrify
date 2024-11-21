@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 import { Users } from '../models/index';
 
-const reqValidation = [
+export const signup = [
   body('name')
     .trim()
     .notEmpty()
@@ -44,4 +44,18 @@ const reqValidation = [
     .withMessage('Picture must be a valid URL.'),
 ];
 
-export default reqValidation;
+export const login = [
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required.')
+    .isEmail()
+    .withMessage('Email is invalid.')
+    .normalizeEmail(),
+  body('password')
+    .trim()
+    .notEmpty()
+    .withMessage('password is required.')
+    .isString()
+    .withMessage('Password must be a string.')
+];
