@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { hash, genSalt, compare } from 'bcryptjs';
 import { Users, IUser } from '../models/index';
 import HttpError from '../utils/HttpError';
-import generateToken from '../utils/generateToken';
+import Token from '../utils/Token';
 
 export const signup = async (req: Request<{}, {}, IUser>, res: Response, next: NextFunction) => {
   try {
@@ -16,8 +16,8 @@ export const signup = async (req: Request<{}, {}, IUser>, res: Response, next: N
     const user: IUser = new Users({ ...signupUserData, password: hashedPassword });
     await user.save();
 
-    const access_token = await generateToken({ userId: user._id }, 'access', '1d');
-    const refresh_token = await generateToken({ userId: user._id }, 'refresh', '30d');
+    const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
+    const refresh_token = await Token.generateToken({ userId: user._id }, 'refresh', '30d');
 
     res.cookie('refreshToken', refresh_token, {
       httpOnly: true,
@@ -58,8 +58,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       throw HttpError.notFound('Invalid password');
     }
 
-    const access_token = await generateToken({ userId: user._id }, 'access', '1d');
-    const refresh_token = await generateToken({ userId: user._id }, 'refresh', '30d');
+    const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
+    const refresh_token = await Token.generateToken({ userId: user._id }, 'refresh', '30d');
 
     res.cookie('refreshToken', refresh_token, {
       httpOnly: true,
@@ -95,7 +95,31 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json({ message: 'refresh token' });
+    const refresh_token = req.cookies.refreshToken;
+
+    if (!refresh_token) {
+      throw HttpError.unauthorized('Please login.');
+    }
+
+    const checkRefreshToken = await Token.verifyToken(refresh_token, 'refresh');
+    const user: IUser | null = await Users.findById(checkRefreshToken.userId);
+
+    if (!user) {
+      throw HttpError.badRequest('Please fill all the required fields.');
+    }
+
+    const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
+
+    res.status(200).json({
+      access_token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        status: user.status,
+      }
+    });
   } catch (error) {
     HttpError.serverFail(error as HttpError, next);
   }
