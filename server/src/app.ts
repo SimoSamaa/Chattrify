@@ -48,6 +48,10 @@ const connectRouters = () => {
 
 connectRouters();
 
+app.use((_: Request, res: Response) => {
+  res.status(404).json({ message: 'Page not found', status: 404 });
+});
+
 app.use(async (error: HttpError, _: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;
   const message = error.message || 'Internal server error';
@@ -55,7 +59,7 @@ app.use(async (error: HttpError, _: Request, res: Response, next: NextFunction) 
   next();
 });
 
-mongoose.connect(MONGO_DB)
+mongoose.connect(MONGO_DB as string)
   .then(() => {
     app.listen(PORT, () => {
       process.stdout
