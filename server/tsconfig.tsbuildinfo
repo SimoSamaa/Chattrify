@@ -1,1 +1,1 @@
-{"root":["./src/app.ts","./src/global.d.ts"],"version":"5.6.3"}
+{"root":["./src/app.ts","./src/global.d.ts","./src/controllers/auth.controller.ts","./src/middleware/reqvalidation.ts","./src/models/index.ts","./src/models/users.ts","./src/routers/auth.route.ts","./src/utils/httperror.ts","./src/utils/generatetoken.ts"],"version":"5.6.3"}
