@@ -27,13 +27,13 @@ export const signup = async (req: Request<{}, {}, IUser>, res: Response, next: N
 
     res.status(201).json({
       message: 'User created successfully',
-      access_token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         picture: user.picture,
         status: user.status,
+        token: access_token,
       }
     });
   } catch (error) {
@@ -69,13 +69,13 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     res.status(200).json({
       message: 'login success',
-      access_token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         picture: user.picture,
         status: user.status,
+        token: access_token,
       }
     });
 
@@ -111,13 +111,13 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
 
     res.status(200).json({
-      access_token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         picture: user.picture,
         status: user.status,
+        token: access_token,
       }
     });
   } catch (error) {
