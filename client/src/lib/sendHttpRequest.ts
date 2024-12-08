@@ -5,7 +5,6 @@ const sendHttpRequest = async <
   endPoint: string,
   method: string = 'GET',
   payload: P | null = null,
-  page: number | null = 1,
 ): Promise<T> => {
 
   const fetchOptions: RequestInit = {
@@ -22,7 +21,7 @@ const sendHttpRequest = async <
     }
   }
 
-  const req = await fetch(`${import.meta.env.VITE_SERVER_URL}/${endPoint}?page=${page}`, fetchOptions);
+  const req = await fetch(`${import.meta.env.VITE_SERVER_URL}/${endPoint}`, fetchOptions);
   const res = await req.json();
 
   if (!req.ok) {
