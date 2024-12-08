@@ -1,26 +1,43 @@
-import { Routes, Route } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ThemeProvider } from "@/components/theme-provider";
 import { RootState } from '@/store/index';
+import GlobalLoading from './components/ui/global-loading';
+import router from './router';
 
-import Home from './pages/HomePage';
-import Login from './pages/LoginPage';
-import Signup from './pages/SignupPage';
-
-import { Button } from '@/components/ui/button';
 
 const App = () => {
-  const data = useSelector((state: RootState) => state.auth.user);
-  console.log('test', data);
+  const { token } = useSelector((state: RootState) => state.auth.user);
 
   return (
     <ThemeProvider>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-      <Button>Click me</Button>
+      <Suspense fallback={<GlobalLoading />} >
+        <Routes>
+          <Route
+            path={router.home.path}
+            element={
+              token
+                ? <router.home.Ele />
+                : <Navigate to={router.auth.login.path} />
+            } />
+
+          <Route
+            path={router.auth.login.path}
+            element={
+              token
+                ? <Navigate to={router.home.path} />
+                : <router.auth.login.Ele />} />
+
+          <Route path={router.auth.signup.path} element={
+            token
+              ? <Navigate to={router.home.path} />
+              : <router.auth.signup.Ele />
+          } />
+
+          <Route path={router.notFound.path} element={<router.notFound.Ele />} />
+        </Routes>
+      </Suspense>
     </ThemeProvider>
   );
 };
