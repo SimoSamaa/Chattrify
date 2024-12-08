@@ -12,7 +12,7 @@ const usePasswordStrength = (password: string) => {
   const strongMatch = password.match(regExpStrong);
   const weakMatch = hasLower && hasUpper;
 
-  if (weakMatch && mediumMatch && strongMatch && password.length > 8) {
+  if (weakMatch && mediumMatch && strongMatch) {
     return ["weak", "medium", "strong"];
   } else if (
     (weakMatch && mediumMatch) ||
