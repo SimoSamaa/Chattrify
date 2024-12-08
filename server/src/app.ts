@@ -16,7 +16,7 @@ const { MONGO_DB } = process.env;
 const PORT = process.env.PORT || 3000;
 const routerFiles = fs.readdirSync(path.join(__dirname, 'routers'));
 const corsOptions = {
-  origin: `http://localhost:${PORT}`,
+  origin: `*`,
   method: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -38,7 +38,7 @@ app.use(cors(corsOptions));
 const connectRouters = () => {
   routerFiles.forEach((file) => {
     try {
-      app.use('/api/v1', require(`./routers/${file}`).default);
+      app.use('/api/v1/', require(`./routers/${file}`).default);
     } catch (error) {
       if (!(error instanceof Error)) return;
       console.log(`Error loading router files: ${error.message}`);
