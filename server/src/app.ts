@@ -38,7 +38,7 @@ app.use(cors(corsOptions));
 const connectRouters = () => {
   routerFiles.forEach((file) => {
     try {
-      app.use('/api/v1/', require(`./routers/${file}`).default);
+      app.use(`/api/v1/${file.split('.')[0]}/`, require(`./routers/${file}`).default);
     } catch (error) {
       if (!(error instanceof Error)) return;
       console.log(`Error loading router files: ${error.message}`);
@@ -48,8 +48,9 @@ const connectRouters = () => {
 
 connectRouters();
 
-app.use((_: Request, res: Response) => {
-  res.status(404).json({ message: 'Page not found', status: 404 });
+app.use((_: Request, __: Response, next: NextFunction) => {
+  const error = HttpError.notFound();
+  next(error);
 });
 
 app.use(async (error: HttpError, _: Request, res: Response, next: NextFunction) => {
@@ -64,11 +65,9 @@ mongoose.connect(MONGO_DB as string)
     app.listen(PORT, () => {
       process.stdout
         .write(`Server Chattrify is running in -> \x1b[34mhttp://localhost:${PORT}\x1b[0m\n`);
+      console.log('connected router files:');
       routerFiles.forEach((file) => {
-        process.stdout.write(
-          'connected router files:\n'
-          + `-> \x1b[33m${file.slice(0, file.lastIndexOf('.')).replace('.', ' ')}\x1b[0m\n`
-        );
+        process.stdout.write(`-> \x1b[33m${file.split('.')[0]}\x1b[0m\n`);
       });
     });
   })
