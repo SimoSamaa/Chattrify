@@ -19,15 +19,15 @@ class HttpError extends Error {
     }
   }
 
-  static badRequest(message: string) {
+  static badRequest(message: string = 'Bad request') {
     throw new HttpError(400, message);
   }
 
-  static notFound(message: string) {
+  static notFound(message: string = 'Not found') {
     throw new HttpError(404, message);
   }
 
-  static unauthorized(message: string) {
+  static unauthorized(message: string = 'Invalid authorized') {
     throw new HttpError(401, message);
   }
 
