@@ -16,8 +16,8 @@ export const signup = async (req: Request<{}, {}, IUser>, res: Response, next: N
     const user: IUser = new Users({ ...signupUserData, password: hashedPassword });
     await user.save();
 
-    const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
-    const refresh_token = await Token.generateToken({ userId: user._id }, 'refresh', '30d');
+    const access_token = await Token.generate({ userId: user._id }, 'access', '5m');
+    const refresh_token = await Token.generate({ userId: user._id }, 'refresh', '30d');
 
     res.cookie('refreshToken', refresh_token, {
       httpOnly: true,
@@ -58,8 +58,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       throw HttpError.notFound('Invalid password');
     }
 
-    const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
-    const refresh_token = await Token.generateToken({ userId: user._id }, 'refresh', '30d');
+    const access_token = await Token.generate({ userId: user._id }, 'access', '5m');
+    const refresh_token = await Token.generate({ userId: user._id }, 'refresh', '30d');
 
     res.cookie('refreshToken', refresh_token, {
       httpOnly: true,
@@ -101,14 +101,14 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
       throw HttpError.unauthorized('Please login.');
     }
 
-    const checkRefreshToken = await Token.verifyToken(refresh_token, 'refresh');
+    const checkRefreshToken = await Token.verify(refresh_token, 'refresh');
     const user: IUser | null = await Users.findById(checkRefreshToken.userId);
 
     if (!user) {
       throw HttpError.badRequest('Please fill all the required fields.');
     }
 
-    const access_token = await Token.generateToken({ userId: user._id }, 'access', '1d');
+    const access_token = await Token.generate({ userId: user._id }, 'access', '1d');
 
     res.status(200).json({
       user: {

@@ -18,7 +18,7 @@ export default class Token {
     this.exp = exp;
   }
 
-  static async generateToken(
+  static async generate(
     payload: object,
     tokenSecure: 'access' | 'refresh',
     expiresIn: string
@@ -42,7 +42,7 @@ export default class Token {
     });
   };
 
-  static async verifyToken(
+  static async verify(
     token: string,
     tokenSecure: 'access' | 'refresh'
   ): Promise<Token> {
