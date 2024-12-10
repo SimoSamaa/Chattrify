@@ -6,4 +6,6 @@ const router = Router();
 
 router.post('/', isAuth, conversationControllers.createOpenConversation);
 
+router.get('/', isAuth, conversationControllers.getConversation);
+
 export default router;
