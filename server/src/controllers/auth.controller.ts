@@ -16,7 +16,7 @@ export const signup = async (req: Request<{}, {}, IUser>, res: Response, next: N
     const user: IUser = new Users({ ...signupUserData, password: hashedPassword });
     await user.save();
 
-    const access_token = await Token.generate({ userId: user._id }, 'access', '5m');
+    const access_token = await Token.generate({ userId: user._id }, 'access', '1d');
     const refresh_token = await Token.generate({ userId: user._id }, 'refresh', '30d');
 
     res.cookie('refreshToken', refresh_token, {
@@ -58,7 +58,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       throw HttpError.notFound('Invalid password');
     }
 
-    const access_token = await Token.generate({ userId: user._id }, 'access', '5m');
+    const access_token = await Token.generate({ userId: user._id }, 'access', '1d');
     const refresh_token = await Token.generate({ userId: user._id }, 'refresh', '30d');
 
     res.cookie('refreshToken', refresh_token, {
