@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { Users } from '../models/index';
+import { Users } from '../../models/index';
 
 export const signup = [
   body('name')
