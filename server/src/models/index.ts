@@ -1,9 +1,12 @@
-import Users, { IUser } from './users';
+import User, { IUser } from './user';
 import Conversation, { IConversation } from './conversation';
+import Message, { IMessage } from './message';
 
 export {
-  Users,
+  User,
   IUser,
   Conversation,
   IConversation,
+  Message,
+  IMessage
 };
