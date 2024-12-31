@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { Users } from '../../models/index';
+import { User } from '../../models/index';
 
 export const signup = [
   body('name')
@@ -18,7 +18,7 @@ export const signup = [
     .withMessage('Email is invalid.')
     .normalizeEmail()
     .custom(async (value) => {
-      const existsEmail = await Users.findOne({ email: value });
+      const existsEmail = await User.findOne({ email: value });
       if (existsEmail) {
         throw new Error('E-mail already exists! try another one.');
       }

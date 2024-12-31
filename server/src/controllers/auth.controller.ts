@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { hash, genSalt, compare } from 'bcryptjs';
-import { Users, IUser } from '../models/index';
+import { User, IUser } from '../models/index';
 import HttpError from '../utils/HttpError';
 import Token from '../utils/Token';
 
@@ -13,7 +13,7 @@ export const signup = async (req: Request<{}, {}, IUser>, res: Response, next: N
     const salt = await genSalt(12);
     const hashedPassword = await hash(signupUserData.password, salt);
 
-    const user: IUser = new Users({ ...signupUserData, password: hashedPassword });
+    const user: IUser = new User({ ...signupUserData, password: hashedPassword });
     await user.save();
 
     const access_token = await Token.generate({ userId: user._id }, 'access', '1d');
@@ -46,7 +46,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     HttpError.validation(req);
 
     const { email, password } = req.body;
-    const user: IUser | null = await Users.findOne({ email });
+    const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
       throw HttpError.notFound('A user withe this email could not be found');
@@ -102,7 +102,7 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     }
 
     const checkRefreshToken = await Token.verify(refresh_token, 'refresh');
-    const user: IUser | null = await Users.findById(checkRefreshToken.userId);
+    const user: IUser | null = await User.findById(checkRefreshToken.userId);
 
     if (!user) {
       throw HttpError.badRequest('Please fill all the required fields.');

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Conversation, IConversation, Users, IUser } from '../models/index';
+import { Conversation, IConversation, User, IUser } from '../models/index';
 import HttpError from '../utils/HttpError';
 
 type TRequest = Request & { userId: string; };
@@ -26,7 +26,7 @@ export const createOpenConversation = async (req: Request, res: Response, next: 
     }
 
     // POPULATE SENDER INFO
-    conversations = await Users.populate(conversations, {
+    conversations = await User.populate(conversations, {
       path: 'latestMessage.sender',
       select: 'name email picture status',
     });
@@ -38,7 +38,7 @@ export const createOpenConversation = async (req: Request, res: Response, next: 
       res.status(200).json(existedConversation);
     } else {
       // CREATE NEW CONVERSATION
-      const receiverUser: IUser | null = await Users.findById(receiverId);
+      const receiverUser: IUser | null = await User.findById(receiverId);
       const newConversation: IConversation = await new Conversation({
         users: [senderId, receiverId],
         isGroup: false,
@@ -80,7 +80,7 @@ export const getConversation = async (req: Request, res: Response, next: NextFun
     }
 
     // POPULATE SENDER INFO
-    const populateConversations = await Users.populate(conversations, {
+    const populateConversations = await User.populate(conversations, {
       path: 'latestMessage.sender',
       select: 'name email picture status',
     });

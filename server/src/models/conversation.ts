@@ -23,16 +23,16 @@ const conversationSchema = new mongoose.Schema<IConversation>({
   users: [
     {
       type: ObjectId,
-      ref: 'Users',
+      ref: 'User',
     }
   ],
   latestMessage: {
     type: ObjectId,
-    ref: 'Messages',
+    ref: 'Message',
   },
   admin: {
     type: ObjectId,
-    ref: 'Users',
+    ref: 'User',
   },
 }, {
   collection: 'conversations',
