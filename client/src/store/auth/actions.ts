@@ -16,7 +16,7 @@ const saveUserData = (userItem: User) => {
 export const signup = (payload: Pick<User, 'name' | 'email'> & { password: string; }) => {
   return async (dispatch: AppDispatch) => {
     try {
-      const res: Response = await sendHttpRequest('signup', 'POST', payload);
+      const res: Response = await sendHttpRequest('auth/signup', 'POST', payload);
       dispatch(authSliceActions.setSignup({ ...res.user }));
       saveUserData({ ...res.user });
     } catch (error) {
@@ -28,7 +28,7 @@ export const signup = (payload: Pick<User, 'name' | 'email'> & { password: strin
 export const login = (payload: { email: string, password: string; }) => {
   return async (dispatch: AppDispatch) => {
     try {
-      const res: Response = await sendHttpRequest('login', 'POST', payload);
+      const res: Response = await sendHttpRequest('auth/login', 'POST', payload);
       dispatch(authSliceActions.setLogin({ ...res.user }));
       saveUserData({ ...res.user });
     } catch (error) {
@@ -39,7 +39,7 @@ export const login = (payload: { email: string, password: string; }) => {
 
 export const logout = () => {
   return (dispatch: AppDispatch) => {
-    dispatch(authSliceActions.setLogout());
     localStorage.removeItem('user');
+    dispatch(authSliceActions.setLogout());
   };
 };

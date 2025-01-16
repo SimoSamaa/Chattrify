@@ -32,10 +32,10 @@ const authSlice = createSlice({
     },
     setLogin(status, { payload }: { payload: User; }) {
       status.user = payload;
-      console.log('login data', status.user);
-
     },
-    setLogout() { },
+    setLogout(status) {
+      status.user = {} as User;
+    },
     setRefreshToken() { },
   },
 });

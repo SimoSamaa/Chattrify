@@ -1,20 +1,16 @@
-import { logout } from '@/store/auth/actions';
 import { Button } from '@/components/ui/button';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/index';
+import SidebarHeader from '@/components/layouts/SidebarHeader';
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
 
-  const test = () => {
-    dispatch(logout());
-  };
-
   return (
-    <>
-      <h1>HOME</h1>
-      <Button onClick={test}>logout</Button>
-    </>
+    <div className='pl-[50px]'>
+      <SidebarHeader />
+      <h1>chat</h1>
+    </div>
   );
 };
 
