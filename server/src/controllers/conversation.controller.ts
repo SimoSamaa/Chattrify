@@ -41,6 +41,7 @@ export const createOpenConversation = async (req: Request, res: Response, next: 
       const receiverUser: IUser | null = await User.findById(receiverId);
       const newConversation: IConversation = await new Conversation({
         users: [senderId, receiverId],
+        picture: receiverUser?.picture,
         isGroup: false,
         name: receiverUser?.name,
       }).save();
@@ -72,7 +73,7 @@ export const getConversation = async (req: Request, res: Response, next: NextFun
       .sort({ updatedAt: -1 });
 
     if (conversations.length === 0) {
-      throw HttpError.notFound('No conversations found for this user!');
+      return res.status(200).json([]);
     }
 
     if (!conversations) {

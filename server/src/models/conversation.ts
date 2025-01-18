@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Types;
 
 interface IConversation extends Document {
   name: string;
+  picture: string;
   isGroup: boolean;
   users: ObjectId[];
   latestMessage: ObjectId;
@@ -14,6 +15,10 @@ const conversationSchema = new mongoose.Schema<IConversation>({
     type: String,
     required: [true, 'Conversation name is required'],
     trim: true,
+  },
+  picture: {
+    type: String,
+    required: true,
   },
   isGroup: {
     type: Boolean,
