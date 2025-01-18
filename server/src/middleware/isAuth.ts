@@ -14,6 +14,8 @@ export default async (req: Request, _: Response, next: NextFunction) => {
 
     try {
       const { userId } = await Token.verify(token, 'access');
+      console.log(userId);
+
       (req as TRequest).userId = userId;
       next();
     } catch (error) {
