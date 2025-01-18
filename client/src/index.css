@@ -84,4 +84,10 @@
   #root {
     @apply min-h-screen;
   }
+
+  .bg-pattern {
+    background-image: radial-gradient(hsl(var(--primary)) 2px, transparent 0);
+    background-size: 30px 30px;
+    background-position: -5px -5px
+  }
 }

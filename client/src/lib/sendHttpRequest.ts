@@ -5,11 +5,12 @@ const sendHttpRequest = async <
   endPoint: string,
   method: string = 'GET',
   payload: P | null = null,
+  token: string | null = null
 ): Promise<T> => {
 
   const fetchOptions: RequestInit = {
     method,
-    // headers: { 'Authorization': `Bearer ${token}` },
+    headers: { 'Authorization': `Bearer ${token}` },
   };
 
   if (method !== 'GET' && payload !== null) {

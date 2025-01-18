@@ -14,7 +14,7 @@ const saveUserData = (userItem: User) => {
 };
 
 export const signup = (payload: Pick<User, 'name' | 'email'> & { password: string; }) => {
-  return async (dispatch: AppDispatch) => {
+  return async (dispatch: AppDispatch): Promise<void> => {
     try {
       const res: Response = await sendHttpRequest('auth/signup', 'POST', payload);
       dispatch(authSliceActions.setSignup({ ...res.user }));
@@ -26,7 +26,7 @@ export const signup = (payload: Pick<User, 'name' | 'email'> & { password: strin
 };
 
 export const login = (payload: { email: string, password: string; }) => {
-  return async (dispatch: AppDispatch) => {
+  return async (dispatch: AppDispatch): Promise<void> => {
     try {
       const res: Response = await sendHttpRequest('auth/login', 'POST', payload);
       dispatch(authSliceActions.setLogin({ ...res.user }));

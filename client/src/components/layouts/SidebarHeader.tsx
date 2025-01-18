@@ -35,7 +35,7 @@ const SidebarHeader = () => {
         id='sidebar'
         ref={header}
         $open={isSidebarOpen}
-        className={`h-screen ${!isSidebarOpen ? 'w-[50px]' : 'w-[240px]'} bg-card py-4 px-2 flex flex-col justify-between [&_svg]:size-5 transition-all duration-150 ease-out fixed top-0 left-0 border-r`}>
+        className={`h-screen ${!isSidebarOpen ? 'w-[50px]' : 'w-[240px]'} bg-card py-4 px-2 flex flex-col justify-between [&_svg]:size-5 transition-all duration-150 ease-out fixed top-0 left-0 border-r z-50`}>
         <ul className='grid gap-4'>
           <li>
             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className='!w-auto'>
@@ -103,15 +103,15 @@ const StyledHeader = styled.header<StyledHeaderProps>`
     ${tw`h-9 rounded flex items-center gap-2 w-full px-2 transition-colors duration-150 ease-out relative`}
 
     &:is(:hover, :focus-visible)  {
-      ${tw`bg-muted`}
+      ${tw`bg-primary/10`}
     }
 
-    &:active  {
+    &:active {
       ${tw`text-muted-foreground`};
     }
 
     &.active {
-      ${tw`bg-muted`};
+      ${tw`bg-primary/10`};
 
       &::before {
       ${tw`content-[''] absolute left-0 top-1/2 -translate-y-1/2 h-1/2 w-[3px] bg-primary rounded-full`};
