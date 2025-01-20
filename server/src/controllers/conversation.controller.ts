@@ -73,7 +73,8 @@ export const getConversation = async (req: Request, res: Response, next: NextFun
       .sort({ updatedAt: -1 });
 
     if (conversations.length === 0) {
-      return res.status(200).json([]);
+      res.status(200).json([]);
+      return;
     }
 
     if (!conversations) {
