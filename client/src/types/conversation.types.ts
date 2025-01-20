@@ -6,6 +6,12 @@ interface Conversation {
   name: string,
   isGroup: boolean,
   users: Omit<User, 'token'>[],
+  latestMessage: {
+    id: string,
+    message: string,
+    files: string[],
+    createdAt: string,
+  };
 }
 
 interface ConversationInitialState {
