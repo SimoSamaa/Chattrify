@@ -20,8 +20,8 @@
     --border: 216 15% 89.84%;
     --input: 216 15% 89.84%;
 
-    --primary: 216 100% 21%;
-    --primary-foreground: 216 2% 92.1%;
+    --primary: 203 100% 50%;
+    --primary-foreground: 203 10% 5%;
 
     --secondary: 216 5% 96.05%;
     --secondary-foreground: 216 7% 12.1%;
@@ -89,5 +89,10 @@
     background-image: radial-gradient(hsl(var(--primary)) 2px, transparent 0);
     background-size: 30px 30px;
     background-position: -5px -5px
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 100, 100, 0.6) transparent;
   }
 }

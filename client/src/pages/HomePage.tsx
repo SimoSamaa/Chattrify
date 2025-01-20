@@ -1,34 +1,13 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store/index';
-import { fetchConversations } from '@/store/chat/actions';
+import React, { useState, useRef, useEffect } from 'react';
 import SidebarHeader from '@/components/layouts/SidebarHeader';
 import Chats from '@/components/chat/Chats';
 import logo from '@/assets/logo.png';
 import { Toaster } from '@/components/ui/toaster';
-import { useToast } from '@/hooks/use-toast';
 
 const Home = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const { toast } = useToast();
-
   const [isResize, setIsResize] = useState(false);
   const leftSide = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(localStorage['resize']);
-
-  const loadConversations = useCallback(async () => {
-    try {
-      await dispatch(fetchConversations());
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: error as string,
-      });
-    }
-  }, [dispatch, toast]);
-
-  useEffect(() => { loadConversations(); }, [loadConversations]);
 
   useEffect(() => {
     if (leftSide.current) {
@@ -65,11 +44,11 @@ const Home = () => {
     <div className='pl-[50px]'>
       <SidebarHeader />
       <main className='flex h-screen w-full'>
-        <div ref={leftSide} className='overflow-hidden relative w-[30vw] p-5 min-w-[250px] min-w-1/2'>
+        <div ref={leftSide} className='overflow-hidden relative w-[30vw] min-w-[300px] min-w-1/2'>
           <span
             id='resize'
             onMouseDown={handelResize}
-            className={`w-[5px] h-full absolute top-0 right-0 select-none cursor-e-resize border-r ${isResize ? 'bg-muted' : 'bg-transparent hover:bg-muted'}`}></span>
+            className={`w-[5px] h-full absolute top-0 right-0 z-10 select-none cursor-e-resize border-r ${isResize ? 'bg-primary' : 'bg-transparent hover:bg-primary'}`}></span>
           <Chats />
         </div>
         <div className='flex-1'>
