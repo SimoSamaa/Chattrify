@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
-import { Message, IMessage } from '../models/index';
+import { Message, IMessage, Conversation, IConversation } from '../models/index';
 import HttpError from '../utils/HttpError';
 
 type TRequest = Request & { userId: string; };
@@ -40,7 +40,12 @@ export const sendMessage = async (req: Request, res: Response, next: NextFunctio
         },
       });
 
-    if (!populatedMess) {
+    const conversation: IConversation | null = await Conversation.findByIdAndUpdate(convId,
+      {
+        latestMessage: newMessage,
+      });
+
+    if (!populatedMess || !conversation) {
       throw HttpError.badRequest('Oops...Something went wrong!');
     }
 
