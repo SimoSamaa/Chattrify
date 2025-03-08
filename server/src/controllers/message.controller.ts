@@ -2,15 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { Message, IMessage, Conversation, IConversation } from '../models/index';
 import HttpError from '../utils/HttpError';
-
-type TRequest = Request & { userId: string; };
+import logger from '../configs/logger.config';
 
 export const sendMessage = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = (req as TRequest).userId;
+    const userId = req.userId;
     const { message, convId, files } = req.body;
 
-    HttpError.validation(req);
+    HttpError.validationReqBody(req);
+
+    const conversationExist: IConversation | null = await Conversation.findById(convId);
+    if (!conversationExist) {
+      logger.info('Conversation not found');
+      throw HttpError.badRequest();
+    }
 
     const newMessage: IMessage = await new Message({
       message,
@@ -20,7 +25,8 @@ export const sendMessage = async (req: Request, res: Response, next: NextFunctio
     }).save();
 
     if (!newMessage) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Message not saved');
+      throw HttpError.badRequest();
     }
 
     const populatedMess = await Message.findById(newMessage._id)
@@ -46,7 +52,8 @@ export const sendMessage = async (req: Request, res: Response, next: NextFunctio
       });
 
     if (!populatedMess || !conversation) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Message not populated');
+      throw HttpError.badRequest();
     }
 
     res.status(200).json(populatedMess);
@@ -59,9 +66,19 @@ export const sendMessage = async (req: Request, res: Response, next: NextFunctio
 export const getMessages = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { convo_id } = req.params;
+    const userId = req.userId;
+    console.log(userId);
 
     if (!mongoose.Types.ObjectId.isValid(convo_id)) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Invalid conversation ID');
+      throw HttpError.badRequest();
+    }
+
+    const conversation: IConversation | null = await Conversation.findById(convo_id);
+    const isUserInConversation = conversation?.users.some((user) => user.toString() === userId);
+    if (!conversation || !isUserInConversation) {
+      logger.info('Conversation not found');
+      throw HttpError.badRequest();
     }
 
     const messages = await Message.find({ conversation: convo_id })
@@ -69,7 +86,8 @@ export const getMessages = async (req: Request, res: Response, next: NextFunctio
       .populate('conversation');
 
     if (!messages) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Messages not found');
+      throw HttpError.badRequest();
     }
 
     res.status(200).json(messages);

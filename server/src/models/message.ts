@@ -29,7 +29,7 @@ const messageSchema = new mongoose.Schema<IMessage>({
   }
 );
 
-const Message = mongoose.models.message || mongoose.model('Message', messageSchema);
+const Message = mongoose.models.message || mongoose.model<IMessage>('Message', messageSchema);
 
 export default Message;
 export type { IMessage };

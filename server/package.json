@@ -25,7 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.1",
     "morgan": "^1.10.0",
-    "zod": "^3.23.8"
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -38,8 +38,6 @@
     "@types/mongoose": "^5.11.96",
     "@types/morgan": "^1.9.9",
     "cross-env": "^7.0.3",
-    "esbuild": "^0.24.0",
-    "esbuild-runner": "^2.2.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
   }

@@ -1,16 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
 import { Conversation, IConversation, User, IUser } from '../models/index';
 import HttpError from '../utils/HttpError';
+import logger from '../configs/logger.config';
 
-type TRequest = Request & { userId: string; };
-
-export const createOpenConversation = async (req: Request, res: Response, next: NextFunction) => {
-  const senderId = (req as TRequest).userId;
-  const { receiverId } = req.body;
+export const createOpenConversation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
 
   try {
+    const senderId = req.userId;
+    const { receiverId } = req.body;
+
     if (!receiverId) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Receiver ID is required');
+      throw HttpError.badRequest();
     }
 
     // EXISTING CONVERSATION
@@ -22,7 +27,8 @@ export const createOpenConversation = async (req: Request, res: Response, next: 
       .populate('latestMessage');
 
     if (!conversations) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Conversations not found');
+      throw HttpError.badRequest();
     }
 
     // POPULATE SENDER INFO
@@ -50,7 +56,8 @@ export const createOpenConversation = async (req: Request, res: Response, next: 
         .populate('users', '-password');
 
       if (!newConversation || !populateConversation) {
-        throw HttpError.badRequest('Oops...Something went wrong!');
+        logger.info('Conversation not created');
+        throw HttpError.badRequest();
       }
 
       res.status(201).json(populateConversation);
@@ -60,10 +67,14 @@ export const createOpenConversation = async (req: Request, res: Response, next: 
   }
 };
 
-export const getConversation = async (req: Request, res: Response, next: NextFunction) => {
-  const userId = (req as TRequest).userId;
+export const getConversation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
 
   try {
+    const userId = req.userId;
     const conversations = await Conversation.find({
       users: { $elemMatch: { $eq: userId } },
     })
@@ -78,7 +89,8 @@ export const getConversation = async (req: Request, res: Response, next: NextFun
     }
 
     if (!conversations) {
-      throw HttpError.badRequest('Oops...Something went wrong!');
+      logger.info('Conversations not found');
+      throw HttpError.badRequest();
     }
 
     // POPULATE SENDER INFO

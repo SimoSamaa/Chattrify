@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import Token from '../utils/Token';
 import HttpError from '../utils/HttpError';
 
-type TRequest = Request & { userId: string; };
-
 export default async (req: Request, _: Response, next: NextFunction) => {
   try {
     const token = String(req.header('Authorization'))?.split(' ')[1];
@@ -16,7 +14,7 @@ export default async (req: Request, _: Response, next: NextFunction) => {
       const { userId } = await Token.verify(token, 'access');
       console.log(userId);
 
-      (req as TRequest).userId = userId;
+      req.userId = userId;
       next();
     } catch (error) {
       throw HttpError.unauthorized('Invalid or expired token');

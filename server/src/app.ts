@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, Router } from 'express';
 import mongoose from 'mongoose';
 import mongoSanitize from 'express-mongo-sanitize';
 import cookieParser from 'cookie-parser';
@@ -7,18 +7,17 @@ import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import path from 'path';
-import fs from 'fs';
 import HttpError from './utils/HttpError';
+import connectRouters from './configs/connectRouters.config';
+import startServer from './configs/server.config';
 
 const app = express();
-const { MONGO_DB } = process.env;
-const PORT = process.env.PORT || 3000;
-const routerFiles = fs.readdirSync(path.join(__dirname, 'routers'));
+const routers = connectRouters();
 const corsOptions = {
-  origin: `*`,
+  origin: process.env.CLIENT_URL,
   method: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
 
 if (process.env.DEV_MODE === 'development') {
@@ -35,21 +34,10 @@ app.use(compression());
 app.use(fileUpload({ useTempFiles: true }));
 app.use(cors(corsOptions));
 
-const connectRouters = () => {
-  routerFiles.forEach((file) => {
-    try {
-      app.use(`/api/v1/${file.split('.')[0]}/`, require(`./routers/${file}`).default);
-    } catch (error) {
-      if (!(error instanceof Error)) return;
-      console.log(`Error loading router files: ${error.message}`);
-    }
-  });
-};
-
-connectRouters();
+routers.forEach(({ path, router }) => app.use(path, router));
 
 app.use((_: Request, __: Response, next: NextFunction) => {
-  const error = HttpError.notFound();
+  const error = HttpError.badRequest();
   next(error);
 });
 
@@ -60,20 +48,5 @@ app.use(async (error: HttpError, _: Request, res: Response, next: NextFunction) 
   next();
 });
 
-mongoose.connect(MONGO_DB as string)
-  .then(() => {
-    app.listen(PORT, () => {
-      process.stdout
-        .write(`Server Chattrify is running in -> \x1b[34mhttp://localhost:${PORT}\x1b[0m\n`);
-      console.log('connected router files:');
-      routerFiles.forEach((file) => {
-        process.stdout.write(`-> \x1b[33m${file.split('.')[0]}\x1b[0m\n`);
-      });
-    });
-  })
-  .catch((err: Error) => {
-    console.log(`Chattrify error server: ${err}`);
-    mongoose.connection.close();
-    console.log('MongoDB connection closed');
-    process.exit(1);
-  });
+startServer(app, routers);
+export default app;

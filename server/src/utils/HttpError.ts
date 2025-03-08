@@ -10,7 +10,7 @@ class HttpError extends Error {
     this.name = this.constructor.name;
   }
 
-  static validation(req: Request) {
+  static validationReqBody(req: Request) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

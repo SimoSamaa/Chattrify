@@ -25,6 +25,7 @@ server/dist
 server/.env
 server/.nyc_output
 server/tmp
+server/src/*.txt
 
 # main dir
 /node_modules

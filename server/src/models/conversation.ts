@@ -44,7 +44,7 @@ const conversationSchema = new mongoose.Schema<IConversation>({
   timestamps: true,
 });
 
-const Conversation = mongoose.models.conversations || mongoose.model('Conversation', conversationSchema);
+const Conversation = mongoose.models.Conversation || mongoose.model<IConversation>('Conversation', conversationSchema);
 
 export default Conversation;
 export type { IConversation };

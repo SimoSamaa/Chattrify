@@ -1,6 +1,6 @@
-import User, { IUser } from './user';
-import Conversation, { IConversation } from './conversation';
-import Message, { IMessage } from './message';
+import User, { IUser } from './User';
+import Conversation, { IConversation } from './Conversation';
+import Message, { IMessage } from './Message';
 
 export {
   User,
