@@ -68,7 +68,7 @@ const Signup = () => {
 
     try {
       setIsLoading(true);
-      await dispatch(authActions.signup(signupData));
+      await dispatch(authActions.authenticate('signup', signupData));
       setSignupSuccess(true);
       setTimeout(() => {
         navigate(router.auth.login.path);

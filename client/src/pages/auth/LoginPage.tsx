@@ -51,7 +51,7 @@ const Login = () => {
 
     try {
       setIsLoading(true);
-      await dispatch(authActions.login(loginData));
+      await dispatch(authActions.authenticate('login', loginData));
       navigate(router.home.path);
     } catch (error) {
       setErrorLoginForm((error as string));

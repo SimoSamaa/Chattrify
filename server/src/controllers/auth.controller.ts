@@ -3,6 +3,7 @@ import { hash, genSalt, compare } from 'bcryptjs';
 import { User, IUser } from '../models/index';
 import HttpError from '../utils/HttpError';
 import Token from '../utils/Token';
+import logger from '../configs/logger.config';
 
 export const signup = async (
   req: Request<{}, {}, IUser>,
@@ -35,7 +36,7 @@ export const login = async (
     HttpError.validationReqBody(req);
 
     const { email, password } = req.body;
-    const user: IUser | null = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean<IUser>();
 
     if (!user) {
       throw HttpError.badRequest('Invalid login data');
@@ -49,6 +50,7 @@ export const login = async (
 
     const access_token = await Token.generate({ userId: user._id }, 'access', '1d');
     const refresh_token = await Token.generate({ userId: user._id }, 'refresh', '30d');
+    const { password: pass, ...loginData } = user;
 
     res.cookie('refresh-token', refresh_token, {
       httpOnly: true,
@@ -60,7 +62,7 @@ export const login = async (
     res.status(200).json({
       message: 'login success',
       user: {
-        ...user.toObject(),
+        ...loginData,
         token: access_token,
       }
     });
