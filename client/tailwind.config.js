@@ -4,6 +4,17 @@ export default {
 	content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
 	theme: {
 		extend: {
+			keyframes: {
+				shakeError: {
+					'0%, 100%': { transform: 'translateX(0)' },
+					'25%': { transform: 'translateX(-5px)' },
+					'50%': { transform: 'translateX(5px)' },
+					'75%': { transform: 'translateX(-5px)' },
+				},
+			},
+			animation: {
+				shakeError: 'shakeError 6s ease-out forwards'
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
